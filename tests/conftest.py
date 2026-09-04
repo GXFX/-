@@ -1,0 +1,26 @@
+import asyncio
+
+import pytest
+import pytest_asyncio
+from httpx import ASGITransport, AsyncClient
+
+from app.main import app
+
+
+@pytest.fixture(scope="session")
+def event_loop():
+    loop = asyncio.new_event_loop()
+    yield loop
+    loop.close()
+
+
+@pytest_asyncio.fixture
+async def client():
+    """
+    Async HTTP client hitting the app in-process (no real network call).
+    Requires the docker-compose `db` and `redis` services to be running,
+    and migrations applied, since these are integration-style tests.
+    """
+    transport = ASGITransport(app=app)
+    async with AsyncClient(transport=transport, base_url="http://test") as ac:
+        yield ac
