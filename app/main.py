@@ -53,6 +53,7 @@ app.include_router(cities.router, prefix=API_PREFIX)
 app.include_router(chats.router, prefix=API_PREFIX)
 app.include_router(reviews.router, prefix=API_PREFIX)
 app.include_router(admin.router, prefix=API_PREFIX)
+app.include_router(push.router, prefix=API_PREFIX)
 
 
 @app.get("/health")
